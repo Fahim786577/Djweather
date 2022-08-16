@@ -1,0 +1,35 @@
+var doughnoutLabelIcon = {
+        id:'doughnoutLabelIcon',
+        afterDraw(chart,args,options){
+           var {ctx,chartArea:{width,height}} = chart
+           //console.log(chart.data.datasets[0].data)
+           /*console.log(chart.getDatasetMeta(0).data[0].tooltipPosition())
+           var {x,y} = chart.getDatasetMeta(0).data[0].tooltipPosition()
+           ctx.fillStyle = 'red'
+           ctx.fillRect(x+135,y+40,10,10)*/
+           
+           chart.data.datasets.forEach((dataset,i)=>{
+              //console.log(chart.getDatasetMeta(i))
+              //console.log(chart.getDatasetMeta(0))
+              chart.getDatasetMeta(i).data.forEach((datapoint,index)=>{
+                  //console.log(datapoint.tooltipPosition())
+                  var { x,y } = datapoint.tooltipPosition()
+                  ctx.fillStyle = dataset.borderColor[index]
+                  ctx.fillRect(x,y,10,10)
+                  var halfwidth = width/2
+                  var halfheight = height/2
+                  var xLine = x>= halfwidth ? x+15:x-15
+                  var yLine = y>= halfheight ? y+15:y-15
+                  var extraLine = x>= halfwidth ? 15:-15   
+                  
+                  var textWidth = ctx.measureText(chart.data.labels[index]).width;
+                  //console.log(ctx.measureText(chart.data.labels[index]))
+                  //console.log(textWidth)
+                  ctx.textBaseLine = 'middle'
+                  ctx.fillText(chart.data.labels[index],halfwidth,yLine)
+              })
+           }) 
+        }
+    }//doughnoutLabelIcon for Plugin
+
+var plugins = [doughnoutLabelIcon]
